@@ -16,13 +16,16 @@ class App extends Component{
   }
 
   componentWillMount(){
+    debugger
     const id = window.location.pathname
-    if(id !== "/"){
-      axios.get(`https://enc-it.herokuapp.com/api/encurtador/get${id}`).then(res => {
-        window.location.replace(res.data.urlOriginal)
-      })
-      .catch(erro => console.log('Erro --> ', erro))
+    if(id === "/"){
+      return
     }
+    axios.get(`https://enc-it.herokuapp.com/api/encurtador/get${id}`).then(res => {
+    debugger
+      window.location.href = res.data.urlOriginal
+    })
+    .catch(erro => console.log('Erro --> ', erro))
   }
 
   handleSearch = (e) => {
@@ -36,6 +39,7 @@ class App extends Component{
   }
 
   criaNovaUrl = () => {
+    debugger
     axios.post('https://enc-it.herokuapp.com/api/encurtador', this.state.novoPost).then(res => {
       this.setState({
         novosDados: {
@@ -55,12 +59,18 @@ class App extends Component{
         <Header/>
         <section className="form">
           <h1>Encurtador de URL</h1>
-          <input type="text" name="urlOriginal" onInput={this.handleSearch} placeholder="Digite ou cole sua URL aqui..."/>
-          <Button onClick={this.criaNovaUrl} color="success">Encurtar!</Button>
-          {dados.urlEncurtada && <Alert color="success">
-            { `Parabéns, aqui está sua URL encurtada: `}<a href={`https://${dados.urlEncurtada}`}>{dados.urlEncurtada}</a>
+          <div className="input-wrapper">
+            <input type="text" name="urlOriginal" onInput={this.handleSearch} placeholder="Cole ou digite sua URL aqui..."/>
+            <Button onClick={this.criaNovaUrl} color="success">Encurtar!</Button>
+          </div>
+          {dados.urlEncurtada &&
+            <Alert color="success">
+            <p>{ `Aqui está sua URL encurtada: `}<a href={`https://${dados.urlEncurtada}`}><strong>{dados.urlEncurtada}</strong></a></p>
           </Alert>}
         </section>
+        <footer>
+          <h5>&copy; Antonio Carlos 2019 - Todos os direitos reservados</h5>
+        </footer>
       </div>
     );
   }
