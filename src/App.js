@@ -15,13 +15,11 @@ class App extends Component{
     }
   }
 
-  componentDidMount(){
-    console.log(window.location)
+  componentWillMount(){
     const id = window.location.pathname
     if(id !== "/"){
       axios.get(`https://enc-it.herokuapp.com/api/encurtador/get${id}`).then(res => {
-        console.log(res.data)
-        window.location.href = res.data.urlOriginal
+        window.location.replace(res.data.urlOriginal)
       })
       .catch(erro => console.log('Erro --> ', erro))
     }
@@ -38,14 +36,15 @@ class App extends Component{
   }
 
   criaNovaUrl = () => {
-    axios.post('/api/encurtador', this.state.novoPost).then(res => {
+    axios.post('https://enc-it.herokuapp.com/api/encurtador', this.state.novoPost).then(res => {
       this.setState({
         novosDados: {
           urlOriginal: res.data.urlOriginal,
           urlEncurtada: res.data.urlEncurtada
         }
-      }, console.log(this.state))
+      })
     })
+    .catch(erro => console.log('Erro --> ', erro))
   }
 
 
