@@ -11,7 +11,8 @@ class App extends Component{
     super(props)
     this.state = {
       novoPost: {},
-      novosDados: {}
+      novosDados: {},
+      loading: false
     }
   }
 
@@ -39,13 +40,17 @@ class App extends Component{
   }
 
   criaNovaUrl = () => {
+    this.setState({
+      loading: true
+    })
     debugger
     axios.post('https://enc-it.herokuapp.com/api/encurtador', this.state.novoPost).then(res => {
       this.setState({
         novosDados: {
           urlOriginal: res.data.urlOriginal,
           urlEncurtada: res.data.urlEncurtada
-        }
+        },
+        loading: false
       })
     })
     .catch(erro => console.log('Erro --> ', erro))
@@ -54,8 +59,18 @@ class App extends Component{
 
   render(){
     const dados = this.state.novosDados
+    const loading = this.state.loading
     return (
       <div className="App">
+        {loading && <section className="loading">
+          <div class="sk-folding-cube">
+            <div class="sk-cube1 sk-cube"></div>
+            <div class="sk-cube2 sk-cube"></div>
+            <div class="sk-cube4 sk-cube"></div>
+            <div class="sk-cube3 sk-cube"></div>
+          </div>
+          <h5>Estamos empacotando sua URL...</h5>
+        </section>}
         <Header/>
         <section className="form">
           <h1>Encurtador de URL</h1>
