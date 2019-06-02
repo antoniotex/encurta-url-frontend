@@ -17,13 +17,11 @@ class App extends Component{
   }
 
   componentWillMount(){
-    debugger
     const id = window.location.pathname
     if(id === "/"){
       return
     }
     axios.get(`https://enc-it.herokuapp.com/api/encurtador/get${id}`).then(res => {
-    debugger
       window.location.href = res.data.urlOriginal
     })
     .catch(erro => console.log('Erro --> ', erro))
@@ -43,7 +41,6 @@ class App extends Component{
     this.setState({
       loading: true
     })
-    debugger
     axios.post('https://enc-it.herokuapp.com/api/encurtador', this.state.novoPost).then(res => {
       this.setState({
         novosDados: {
@@ -63,11 +60,11 @@ class App extends Component{
     return (
       <div className="App">
         {loading && <section className="loading">
-          <div class="sk-folding-cube">
-            <div class="sk-cube1 sk-cube"></div>
-            <div class="sk-cube2 sk-cube"></div>
-            <div class="sk-cube4 sk-cube"></div>
-            <div class="sk-cube3 sk-cube"></div>
+          <div className="sk-folding-cube">
+            <div className="sk-cube1 sk-cube"></div>
+            <div className="sk-cube2 sk-cube"></div>
+            <div className="sk-cube4 sk-cube"></div>
+            <div className="sk-cube3 sk-cube"></div>
           </div>
           <h5>Estamos empacotando sua URL...</h5>
         </section>}
@@ -78,9 +75,10 @@ class App extends Component{
             <input type="text" name="urlOriginal" onInput={this.handleSearch} placeholder="Cole ou digite sua URL aqui..."/>
             <Button onClick={this.criaNovaUrl} color="success">Encurtar!</Button>
           </div>
-          {dados.urlEncurtada &&
+          {dados.urlEncurtada && !loading &&
             <Alert color="success">
-            <p>{ `Aqui está sua URL encurtada: `}<a href={`https://${dados.urlEncurtada}`}><strong>{dados.urlEncurtada}</strong></a></p>
+            <p>Aqui está sua URL encurtada:</p>
+            <p><a href={`https://${dados.urlEncurtada}`}><strong>{dados.urlEncurtada}</strong></a></p>
           </Alert>}
         </section>
         <footer>
